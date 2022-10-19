@@ -4,6 +4,8 @@
   <div>
     <!-- <p>{{formState.getData}}</p> -->
     <button @click="stopLocation()">STOP</button>
+    <button @click="startLocation()">START</button>
+
     <userView />
     <!-- <button @click="getLocation()">Track Location</button> -->
     
@@ -38,7 +40,8 @@ export default defineComponent({
       center: { lat: 40.689247, lng: -74.044502 },
       loader: false,
       data: [],
-      getData:[]
+      getData:[],
+      flag:false
     });
     const line = reactive({
       flightPath: {
@@ -49,21 +52,28 @@ export default defineComponent({
         strokeWeight: 2
       }
     });
-    const stopLocation = ()=>{
-      console.log("stop")
-      clearInterval(getLocation());
-
-    }
+  
     onMounted(async () => {
       // const currentUser = Parse.User.current();
+      const currentUser = Parse.User.current();
+      // await User.getPointer(currentUser.id).then((obj)=>{
+      //   var ldata =  currentUser.get('userLocation')
+      // })
+
+      if(currentUser){
+        var ldata =  currentUser.get('userLocation')
+         console.log("ldata",ldata)
+         formState.data=ldata
+      }
+
       getLocation();
 
 
      
-      window.setInterval(() => {
-        navigator.geolocation.getCurrentPosition(() => {});
-        getLocation();
-      }, 9000); //number of milliseconds
+      // window.setInterval(() => {
+      //   navigator.geolocation.getCurrentPosition(() => {});
+      //   getLocation();
+      // }, 9000); 
     });
 
     const updateLocation = async () => {
@@ -125,16 +135,35 @@ export default defineComponent({
     };
     // setInterval(updateLocation, 5000);
 
-    const trackLocation = () => {
+    const startLocation = () => {
       // console.log("hi")
       // setTimeout(updateLocation, 1000);
+    var intervel =   window.setInterval(() => {
+      
+        if(formState.flag){
+
+          window.clearInterval(intervel)
+        }
+        else{
+        getLocation();
+        }
+        // navigator.geolocation.getCurrentPosition(() => {});
+      }, 1000); 
+      // clearInterval(startLocation());
     };
+    const stopLocation = ()=>{
+      console.log("stop")
+      // clearInterval(startLocation());
+      formState.flag=true
+      // clearInterval(myInterval);
+
+    }
 
     return {
       center,
       formState,
       updateLocation,
-      trackLocation,
+      startLocation,
       getLocation,
       line,
       stopLocation
