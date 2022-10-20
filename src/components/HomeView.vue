@@ -2,9 +2,11 @@
 
 <template>
   <div>
-    <!-- <p>{{formState.getData}}</p> -->
-    <button @click="stopLocation()">STOP</button>
-    <button @click="startLocation()">START</button>
+    <!-- <p>{{formState.user && !formState.sharing ? "Sharing Location........" : "Stopped Location................."}}</p> -->
+    <div v-if="formState.user">
+      <button v-if="formState.stop "  @click="stopLocation()">STOP</button>
+    <button v-if="formState.start  " @click="startLocation()">START</button>
+    </div>
 
     <userView />
     <!-- <button @click="getLocation()">Track Location</button> -->
@@ -34,6 +36,8 @@ import userView from "../components/UserView.vue";
 export default defineComponent({
   components: { GoogleMap, Marker, Polyline, userView },
   setup() {
+    const currentUser = Parse.User.current();
+
     const center = { lat: 40.689247, lng: -74.044502 };
     const formState = reactive({
       image: "",
@@ -41,7 +45,11 @@ export default defineComponent({
       loader: false,
       data: [],
       getData:[],
-      flag:false
+      flag:false,
+      sharing:false,
+      start:null,
+      stop:null,
+      user:null
     });
     const line = reactive({
       flightPath: {
@@ -54,19 +62,25 @@ export default defineComponent({
     });
   
     onMounted(async () => {
-      // const currentUser = Parse.User.current();
       const currentUser = Parse.User.current();
+      if(currentUser){
+        formState.start=true
+        formState.stop=false,
+        formState.user=true
+      }
+      // const currentUser = Parse.User.current();
       // await User.getPointer(currentUser.id).then((obj)=>{
       //   var ldata =  currentUser.get('userLocation')
       // })
 
-      if(currentUser){
-        var ldata =  currentUser.get('userLocation')
-         console.log("ldata",ldata)
-         formState.data=ldata
-      }
+      // if(currentUser){
+      //   var ldata =  currentUser.get('userLocation')
+      //    console.log("ldata",ldata)
+      //    formState.data=currentUser.get('userLocation')
+      //    console.log(formState.data[0])
+      // }
 
-      getLocation();
+      // getLocation();s
 
 
      
@@ -101,6 +115,9 @@ export default defineComponent({
         await navigator.geolocation.getCurrentPosition(async position => {
           console.log(position.coords.latitude);
           console.log(position.coords.longitude);
+          console.log(formState.data)
+          let myTarget = JSON.parse(JSON.stringify(formState.data))
+          console.log(myTarget)
           formState.data.push({
             lat: position.coords.latitude,
             lng: position.coords.longitude
@@ -114,7 +131,7 @@ export default defineComponent({
           formState.center.lat = position.coords.latitude;
           formState.center.lng = position.coords.longitude;
           
-          const currentUser = Parse.User.current();
+          // const currentUser = Parse.User.current();
           console.log("curremt user",currentUser.get("username"),currentUser.id)
           await User.getPointer(currentUser.id).then(obj => {
             currentUser.set({
@@ -135,26 +152,55 @@ export default defineComponent({
     };
     // setInterval(updateLocation, 5000);
 
-    const startLocation = () => {
-      // console.log("hi")
+    const startLocation = async() => {
+      formState.flag=false
+      console.log("hi")
       // setTimeout(updateLocation, 1000);
+      currentUser.set({
+        'state':true
+      })
+
+      await currentUser.save()
     var intervel =   window.setInterval(() => {
       
+      console.log(".......")
+      
         if(formState.flag){
+      console.log(",,,,,,,,,,,,,,")
+      formState.start=true
+      formState.stop=false
+          
 
           window.clearInterval(intervel)
         }
         else{
+      console.log("!!!!!!!!!!!!!!!!")
+      formState.start=false
+      formState.stop=true
+
         getLocation();
         }
         // navigator.geolocation.getCurrentPosition(() => {});
-      }, 1000); 
+      }, 3000); 
       // clearInterval(startLocation());
     };
-    const stopLocation = ()=>{
+    const stopLocation = async()=>{
+      // formState.stop=false
+      currentUser.set({
+        'state':false
+      })
+
+      await currentUser.save()
+
       console.log("stop")
+
       // clearInterval(startLocation());
+
+    
       formState.flag=true
+
+      // formState.start=true
+     
       // clearInterval(myInterval);
 
     }
