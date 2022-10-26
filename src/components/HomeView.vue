@@ -11,8 +11,8 @@
     <userView />
     <!-- <button @click="getLocation()">Track Location</button> -->
     
-    <GoogleMap
-      
+    <GoogleMap  
+      v-if="formState.loader"
       api-key="AIzaSyABPywZVGnAsgP8llgiBFnx8sAvUUiRyv4"
       style="width: 100%; height: 500px"
       :center="formState.center"
@@ -80,7 +80,7 @@ export default defineComponent({
       //    console.log(formState.data[0])
       // }
 
-      // getLocation();s
+      // getLocation();
 
 
      
@@ -108,7 +108,7 @@ export default defineComponent({
 
     const getLocation = async () => {
       const checkUseer = Parse.User.current();
-      // formState.loader = false;
+      formState.loader = false;
       if(checkUseer){
         if (navigator.geolocation) {
         // console.log("h")
@@ -144,7 +144,7 @@ export default defineComponent({
             console.log(obj);
           });
          
-          // formState.loader = true;
+          formState.loader = true;
         });
       }
       }
@@ -153,6 +153,7 @@ export default defineComponent({
     // setInterval(updateLocation, 5000);
 
     const startLocation = async() => {
+      
       formState.flag=false
       console.log("hi")
       // setTimeout(updateLocation, 1000);
