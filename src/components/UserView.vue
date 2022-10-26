@@ -12,8 +12,8 @@
     </div>
     <div v-if="formState.signin">
       <p>Sign In</p>
-      <input v-model="formState.username" placeholder="username" />
-      <input v-model="formState.password" placeholder="password" />
+      <input v-model="formState.username1" placeholder="username" />
+      <input v-model="formState.password1" placeholder="password" />
 
       <button @click="Signin">Sign In</button>
     </div>
@@ -34,6 +34,8 @@ export default defineComponent({
     const formState = reactive({
       username: "",
       password: "",
+      username1: "",
+      password1: "",
       signup: true,
       signin: true,
       logout: true,
@@ -60,7 +62,10 @@ export default defineComponent({
     };
 
     const Signin = async () => {
-      await Parse.User.logIn(formState.username, formState.password).then(
+
+
+      try {
+        await Parse.User.logIn(formState.username1, formState.password1).then(
         () => {
           alert("user sign in success");
       const currentUser = Parse.User.current();
@@ -74,6 +79,11 @@ export default defineComponent({
 
         }
       );
+        
+      } catch (error) {
+        // Show the error message somewhere and let the user try again.
+        alert("Error: " + error.code + " " + error.message);
+      }
     };
     const Logout = async() => {
       const currentUser = Parse.User.current();
@@ -84,10 +94,15 @@ export default defineComponent({
       await currentUser.save()
       var ldata = currentUser.get("userLocation");
       console.log(ldata)
-      console.log(ldata.pop())
+      // console.log(ldata.pop())
 
       var data=[]
-      var len = ldata.length
+      if(ldata){
+        var len = ldata.length
+   
+      }
+      console.log("LLLLLLLLLLLLLLLLLL",len)
+     if(len>=0){
       if(len>=1){
       var  myTarget = JSON.parse(JSON.stringify(ldata[len-1]))
 
@@ -96,6 +111,7 @@ export default defineComponent({
        myTarget = JSON.parse(JSON.stringify(ldata[0]))
 
       }
+     }
       console.log("len",len)
       console.log("mytar",myTarget)
       data.push(myTarget)

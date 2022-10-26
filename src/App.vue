@@ -1,19 +1,10 @@
 <template>
-  <div>
-    
-    <HomeV />
-  </div>
+  <nav>
+    <router-link to="/user">SignUp/SignIn</router-link> |
+    <router-link to="/location">Location</router-link>
+  </nav>
+  <router-view/>
 </template>
-
-<script>
-import HomeV from "./components/HomeView.vue";
-export default {
-  name: "App",
-  components: {
-    HomeV,
-  },
-};
-</script>
 
 <style>
 #app {
@@ -22,6 +13,18 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+nav {
+  padding: 30px;
+}
+
+nav a {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>

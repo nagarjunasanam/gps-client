@@ -1,6 +1,7 @@
 import { createApp } from "vue";
 import App from "./App.vue";
 import Parse from "parse";
+import router from './router'
 
 Parse.initialize(
   "3kUoLhExL7MvQZPpeQOzeWX8lBRg9ByH2MX98NV3",
@@ -9,4 +10,4 @@ Parse.initialize(
 Parse.serverURL = "https://parseapi.back4app.com/";
 Parse.masterKey = "1JfPZjCAtQhYCB9WdoorUzdfbyllqM1nZfGFD26u";
 
-createApp(App).mount("#app");
+createApp(App).use(router).mount("#app");
