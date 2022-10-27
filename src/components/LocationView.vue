@@ -8,19 +8,20 @@
       <button v-if="formState.stop "  @click="stopLocation()">STOP</button>
     <button v-if="formState.start  " @click="startLocation()">START</button>
     </div>
-
+<p>{{formState.data}}</p>
+<p v-if="formState.data.length >=1">{{formState.data[formState.data.length-1]}}</p>
     <!-- <userView /> -->
     <!-- <button @click="getLocation()">Track Location</button> -->
     
     <GoogleMap  
-      v-if="formState.loader"
+     v-if="formState.showMap"
       api-key="AIzaSyABPywZVGnAsgP8llgiBFnx8sAvUUiRyv4"
       style="width: 100%; height: 500px"
       :center="formState.center"
       :zoom="25"
     >
-      <Polyline :options="line.flightPath" />
-      <Marker :options="{ position: formState.center }" />
+      <Polyline v-if="formState.loader" :options="line.flightPath" />
+      <Marker v-if="formState.loader" :options="{ position: formState.center }" />
     </GoogleMap>
   </div>
 </template>
@@ -50,7 +51,8 @@ export default defineComponent({
       sharing:false,
       start:null,
       stop:null,
-      user:null
+      user:null,
+      showMap:false
     });
     const line = reactive({
       flightPath: {
@@ -112,11 +114,13 @@ export default defineComponent({
       formState.loader = false;
       if(checkUseer){
         if (navigator.geolocation) {
+          
         // console.log("h")
         await navigator.geolocation.getCurrentPosition(async position => {
           console.log(position.coords.latitude);
           console.log(position.coords.longitude);
           console.log(formState.data)
+     
           let myTarget = JSON.parse(JSON.stringify(formState.data))
           console.log(myTarget)
           formState.data.push({
@@ -131,6 +135,8 @@ export default defineComponent({
           // console.log(formState.center.lat)
           formState.center.lat = position.coords.latitude;
           formState.center.lng = position.coords.longitude;
+               //show map
+          formState.showMap=true
           
           // const currentUser = Parse.User.current();
           console.log("curremt user",currentUser.get("username"),currentUser.id)
