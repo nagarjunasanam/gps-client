@@ -7,9 +7,7 @@
     <div v-if="formState.user">
       <button v-if="formState.stop "  @click="stopLocation()">STOP</button>
     <button v-if="formState.start  " @click="startLocation()">START</button>
-    </div>
-<p>{{formState.data}}</p>
-<p v-if="formState.data.length >=1">{{formState.data[formState.data.length-1]}}</p>
+
     <!-- <userView /> -->
     <!-- <button @click="getLocation()">Track Location</button> -->
     
