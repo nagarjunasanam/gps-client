@@ -2,8 +2,12 @@
 
 <template>
   <div>
+    <div v-if="formState.user" >
+      <SignOut />
+    </div>
+    
     <!-- <p>{{formState.user && !formState.sharing ? "Sharing Location........" : "Stopped Location................."}}</p> -->
-    <h1>{{formState.user ? "":"Sign to share Location"}}</h1>
+    <h1>{{formState.user ? "":"SignIn to share Location"}}</h1>
     <div v-if="formState.user">
       <button v-if="formState.stop "  @click="stopLocation()">STOP</button>
     <button v-if="formState.start  " @click="startLocation()">START</button>
@@ -31,11 +35,12 @@ import { GoogleMap, Marker, Polyline } from "vue3-google-map";
 
 import Parse from "parse";
 import User from "../server/user";
+import SignOut from "../components/SignOut.vue"
 // import userView from "./UserView.vue";
 // import Parse from "parse";
 
 export default defineComponent({
-  components: { GoogleMap, Marker, Polyline },
+  components: { GoogleMap, Marker, Polyline,SignOut },
   setup() {
     const currentUser = Parse.User.current();
 
