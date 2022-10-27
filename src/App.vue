@@ -1,6 +1,6 @@
 <template>
   <nav>
-    <router-link to="/user">SignUp/SignIn</router-link> |
+    <router-link to="/user">Profile</router-link> |
     <router-link to="/location">Location</router-link>
   </nav>
   <router-view/>
