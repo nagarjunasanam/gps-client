@@ -10,6 +10,7 @@
 
     <!-- <userView /> -->
     <!-- <button @click="getLocation()">Track Location</button> -->
+    </div>
     
     <GoogleMap  
      v-if="formState.showMap"
