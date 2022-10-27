@@ -13,12 +13,15 @@
     
     <script>
 import { defineComponent, reactive, onMounted } from "vue";
+import { useRouter } from "vue-router";
+
 
 import Parse from "parse";
 
 export default defineComponent({
   components: {},
   setup() {
+    const router = useRouter()
     const formState = reactive({
       username: "",
       password: "",
@@ -71,7 +74,9 @@ export default defineComponent({
 
       Parse.User.logOut().then(() => {
         alert("user logged out");
-        location.reload();
+        // location.reload();
+
+        router.push('/')
 
         //   const currentUser = Parse.User.current();  // this will now be null
       });

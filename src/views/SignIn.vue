@@ -2,15 +2,26 @@
 
 <template>
     <div>
-    <router-link to="/signup">SignUp</router-link> |
+   
 
      
       <div >
-        <p>Sign In</p>
-        <input v-model="formState.username1" placeholder="username" />
-        <input v-model="formState.password1" placeholder="password" />
+       
+        <h1>Sign In</h1>
+        <form>
+          <label>Username:</label>
+        <input v-model="formState.username1" placeholder="username" /> <br />
+        <label>Password:</label>
+        <input v-model="formState.password1" placeholder="password" /> <br /><br />
+
+
+
+        </form>
   
-        <button @click="Signin">Sign In</button>
+        <button @click="Signin">Sign In</button> <span>click to signup <button>
+          <router-link to="/">SignUp</router-link> 
+    
+        </button></span>
       </div>
      
     </div>
@@ -18,12 +29,14 @@
       
       <script>
   import { defineComponent, reactive, onMounted } from "vue";
+import { useRouter } from "vue-router";
   
   import Parse from "parse";
   
   export default defineComponent({
     components: {},
     setup() {
+      const router = useRouter()
       const formState = reactive({
         username: "",
         password: "",
@@ -42,6 +55,7 @@
         try {
           await Parse.User.logIn(formState.username1, formState.password1).then(
           () => {
+            router.push('/location')
             alert("user sign in success");
         const currentUser = Parse.User.current();
             if(currentUser){
@@ -50,7 +64,7 @@
         })
             }
   
-            location.reload();
+            // location.reload();
   
           }
         );

@@ -1,14 +1,51 @@
 <template>
+  <!-- <p>{{formState}}</p> -->
+  <!-- <div v-if="formState.user">
+    <SignOut />
+  </div> -->
   <nav>
     <!-- <router-link to="/user">Profile</router-link> | -->
-    <router-link to="/signup">SignUp</router-link> |
-    <router-link to="/signin">SignIn</router-link> |
-
-
+    <!-- <button v-if="!formState.user">
+      <router-link to="/signup">SignUp</router-link>
+    </button> |
+    <button v-if="!formState.user">
+      <router-link to="/signin">SignIn</router-link>
+    </button> | -->
+  <!-- <button>
     <router-link to="/location">Location</router-link>
+
+  </button> -->
+
   </nav>
   <router-view/>
 </template>
+<script>
+import { defineComponent, reactive, onMounted } from "vue";
+// import SignOut from "./components/SignOut.vue"
+// import SignUp from "./components/signUp.vue"
+
+// import Parse from "parse";
+
+export default defineComponent({
+  components: {},
+  setup() {
+    const formState = reactive({
+      user:null
+    });
+
+
+    
+  
+
+    onMounted(() => {
+     
+     
+    });
+
+    return { formState };
+  }
+});
+</script>
 
 <style>
 #app {
